@@ -30,23 +30,27 @@ namespace TheQuest
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TheQuest));
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.BackGround = new System.Windows.Forms.PictureBox();
             this.Ground = new System.Windows.Forms.Panel();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.test = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.BackGround)).BeginInit();
+            this.Ground.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.test)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // BackGround
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(-5, -2);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(600, 400);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.BackGround.Image = ((System.Drawing.Image)(resources.GetObject("BackGround.Image")));
+            this.BackGround.Location = new System.Drawing.Point(-5, -2);
+            this.BackGround.Margin = new System.Windows.Forms.Padding(0);
+            this.BackGround.Name = "BackGround";
+            this.BackGround.Size = new System.Drawing.Size(600, 400);
+            this.BackGround.TabIndex = 0;
+            this.BackGround.TabStop = false;
             // 
             // Ground
             // 
+            this.Ground.Controls.Add(this.test);
             this.Ground.Location = new System.Drawing.Point(68, 54);
             this.Ground.Margin = new System.Windows.Forms.Padding(0);
             this.Ground.Name = "Ground";
@@ -54,25 +58,35 @@ namespace TheQuest
             this.Ground.TabIndex = 1;
             this.Ground.Visible = false;
             // 
-            // Form1
+            // test
+            // 
+            this.test.Location = new System.Drawing.Point(262, 125);
+            this.test.Name = "test";
+            this.test.Size = new System.Drawing.Size(100, 50);
+            this.test.TabIndex = 0;
+            this.test.TabStop = false;
+            // 
+            // TheQuest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(594, 397);
             this.Controls.Add(this.Ground);
-            this.Controls.Add(this.pictureBox1);
-            this.Name = "Form1";
+            this.Controls.Add(this.BackGround);
+            this.Name = "TheQuest";
             this.Text = "Form1";
             this.TransparencyKey = System.Drawing.Color.Transparent;
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BackGround)).EndInit();
+            this.Ground.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.test)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox BackGround;
         private System.Windows.Forms.Panel Ground;
+        private System.Windows.Forms.PictureBox test;
     }
 }
-

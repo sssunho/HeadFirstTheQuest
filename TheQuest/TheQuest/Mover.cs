@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace TheQuest
 {
     abstract class Mover
     {
+        private PictureBox pictureBox;
+
         private const int MoveInterval = FormSizeInfo.TilePixelSize;
         protected Point location;
         public Point Location { get { return location; } }

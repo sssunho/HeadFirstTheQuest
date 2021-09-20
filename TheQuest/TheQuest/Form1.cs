@@ -13,9 +13,13 @@ namespace TheQuest
 
     public partial class TheQuest : Form
     {
+        GameManager manager;
+
         public TheQuest()
         {
             InitializeComponent();
+            manager = new GameManager(new Rectangle(0, 0, FormSizeInfo.GroundNumsTileX, FormSizeInfo.GroundNumsTileY));
+            manager.test(this.test);
         }
     }
 }

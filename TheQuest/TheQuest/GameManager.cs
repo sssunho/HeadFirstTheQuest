@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace TheQuest
 {
@@ -9,6 +10,7 @@ namespace TheQuest
     {
         public List<Enemy> Enemies;
         public Weapon WeaponInRoom;
+        public Dictionary<string, Image> ImageTable = new Dictionary<string, Image>();
 
         private Player player;
         public Point PlayerLocation { get { return player.Location; } }
@@ -25,6 +27,7 @@ namespace TheQuest
         {
             this.boundaries = boundaries;
             player = new Player(this, new Point(11, 2));
+            InitImages();
         }
 
         public void Move(Direction direction, Random random)
@@ -77,6 +80,31 @@ namespace TheQuest
                     WeaponInRoom = new Weapons.Sword(this, GetRandomLocation(random));
                     break;
             }
+        }
+
+        private void InitImages()
+        {
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(@"Images");
+            foreach(System.IO.FileInfo file in di.GetFiles())
+            {
+                int i;
+                string fileName = file.Name;
+                for (i = fileName.Length - 1; i >= 0 && fileName[i] != '.'; i--) ;
+                if(i >= 0)
+                {
+                    if (fileName.Substring(i + 1) == "png")
+                    {
+                        string name = fileName.Substring(0, i);
+                        Image image = Image.FromFile(fileName);
+                        ImageTable.Add(name, image);
+                    }
+                }
+            }
+        }
+
+        public void test(PictureBox pictureBox)
+        {
+            pictureBox.Image = ImageTable["bat"];
         }
 
     }
