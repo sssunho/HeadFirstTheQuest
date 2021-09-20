@@ -11,8 +11,10 @@ namespace TheQuest
         public const int DEPTH = 400;
 
         public const int TilePixelSize = 38;
-        public const int GroundWidth = TilePixelSize * GroundTileWidth;
-        public const int GroundHeight = TilePixelSize * GroundTileHeight;
+        public const int GroundNumsTileX = 12;
+        public const int GroundNumsTileY = 5;
+        public const int GroundWidth = TilePixelSize * GroundNumsTileX;
+        public const int GroundHeight = TilePixelSize * GroundNumsTileY;
 
     }
 

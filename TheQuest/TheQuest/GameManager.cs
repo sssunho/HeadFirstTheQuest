@@ -7,8 +7,8 @@ namespace TheQuest
 {
     class GameManager
     {
-        private List<Enemy> Enemies;
-        private Weapon WeaponInRoom;
+        public List<Enemy> Enemies;
+        public Weapon WeaponInRoom;
 
         private Player player;
         public Point PlayerLocation { get { return player.Location; } }
@@ -31,7 +31,7 @@ namespace TheQuest
         {
             player.Move(direction);
             foreach (Enemy enemy in Enemies)
-                enemy.move(random);
+                enemy.Move(random);
         }
 
         public void Equip(string weaponName)
@@ -63,7 +63,20 @@ namespace TheQuest
 
         private Point GetRandomLocation (Random random)
         {
-            return new Point(random.Next(FormSizeInfo.))
+            return new Point(random.Next(FormSizeInfo.GroundNumsTileX, FormSizeInfo.GroundNumsTileY));
+        }
+
+        public void NewLevel(Random random)
+        {
+            level++;
+            switch(level)
+            {
+                case 1:
+                    Enemies = new List<Enemy>();
+                    Enemies.Add(new Enemies.Bat(this, GetRandomLocation(random)));
+                    WeaponInRoom = new Weapons.Sword(this, GetRandomLocation(random));
+                    break;
+            }
         }
 
     }
