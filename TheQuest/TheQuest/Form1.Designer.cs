@@ -31,11 +31,8 @@ namespace TheQuest
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TheQuest));
             this.BackGround = new System.Windows.Forms.PictureBox();
-            this.Ground = new System.Windows.Forms.Panel();
-            this.test = new System.Windows.Forms.PictureBox();
+            this.Ground = new DoubleBufferPanel();
             ((System.ComponentModel.ISupportInitialize)(this.BackGround)).BeginInit();
-            this.Ground.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.test)).BeginInit();
             this.SuspendLayout();
             // 
             // BackGround
@@ -50,21 +47,11 @@ namespace TheQuest
             // 
             // Ground
             // 
-            this.Ground.Controls.Add(this.test);
-            this.Ground.Location = new System.Drawing.Point(68, 54);
+            this.Ground.Location = new System.Drawing.Point(73, 55);
             this.Ground.Margin = new System.Windows.Forms.Padding(0);
             this.Ground.Name = "Ground";
-            this.Ground.Size = new System.Drawing.Size(456, 190);
+            this.Ground.Size = new System.Drawing.Size(444, 185);
             this.Ground.TabIndex = 1;
-            this.Ground.Visible = false;
-            // 
-            // test
-            // 
-            this.test.Location = new System.Drawing.Point(262, 125);
-            this.test.Name = "test";
-            this.test.Size = new System.Drawing.Size(100, 50);
-            this.test.TabIndex = 0;
-            this.test.TabStop = false;
             // 
             // TheQuest
             // 
@@ -77,8 +64,6 @@ namespace TheQuest
             this.Text = "Form1";
             this.TransparencyKey = System.Drawing.Color.Transparent;
             ((System.ComponentModel.ISupportInitialize)(this.BackGround)).EndInit();
-            this.Ground.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.test)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -86,7 +71,6 @@ namespace TheQuest
         #endregion
 
         private System.Windows.Forms.PictureBox BackGround;
-        private System.Windows.Forms.Panel Ground;
-        private System.Windows.Forms.PictureBox test;
+        private DoubleBufferPanel Ground;
     }
 }

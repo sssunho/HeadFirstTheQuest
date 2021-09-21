@@ -10,7 +10,7 @@ namespace TheQuest
     {
         public List<Enemy> Enemies;
         public Weapon WeaponInRoom;
-        public Dictionary<string, Image> ImageTable = new Dictionary<string, Image>();
+        public Dictionary<string, Bitmap> ImageTable = new Dictionary<string, Bitmap>();
 
         private Player player;
         public Point PlayerLocation { get { return player.Location; } }
@@ -95,7 +95,7 @@ namespace TheQuest
                     if (fileName.Substring(i + 1) == "png")
                     {
                         string name = fileName.Substring(0, i);
-                        Image image = Image.FromFile(fileName);
+                        Bitmap image = new Bitmap(@"Images\" + fileName);
                         ImageTable.Add(name, image);
                     }
                 }
@@ -104,8 +104,17 @@ namespace TheQuest
 
         public void test(PictureBox pictureBox)
         {
-            pictureBox.Image = ImageTable["bat"];
+            pictureBox.Image = ImageTable["battleaxe"];
         }
 
+        public void DrawImage(Graphics g, string name, Point p)
+        {
+            g.DrawImage(ImageTable[name], p);
+        }
+
+        public Bitmap LoadImage(string name)
+        {
+            return ImageTable[name];
+        }
     }
 }

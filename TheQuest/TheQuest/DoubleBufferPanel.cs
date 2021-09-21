@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace TheQuest
 {
@@ -8,9 +10,7 @@ namespace TheQuest
     {
         public DoubleBufferPanel()
         {
-            this.SetStyle(System.Windows.Forms.ControlStyles.OptimizedDoubleBuffer | System.Windows.Forms.ControlStyles.UserPaint |
-                System.Windows.Forms.ControlStyles.AllPaintingInWmPaint, true);
-            this.UpdateStyles();
+            DoubleBuffered = true;
         }
     }
 }
