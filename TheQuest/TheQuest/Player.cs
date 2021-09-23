@@ -23,7 +23,7 @@ namespace TheQuest
             }
         }
 
-        public Player(GameManager manager, Point location) : base(manager, location)
+        public Player(GameManager manager, Point location, string imageName) : base(manager, location, imageName)
         {
             hitPoints = 10;
         }
@@ -50,15 +50,18 @@ namespace TheQuest
         public void Move(Direction direction)
         {
             base.location = Move(direction, manager.Boundaries);
-            if(!manager.WeaponInRoom.PickedUp)
-            {
+            Console.WriteLine(location);
+            //if(!manager.WeaponInRoom.PickedUp)
+            //{
 
-            }
+            //}
         }
 
         public void Attack(Direction direction, Random random)
         {
-
+            if (equippedWeapon == null)
+                return;
+            equippedWeapon.Attack(direction, random);
         }
 
 

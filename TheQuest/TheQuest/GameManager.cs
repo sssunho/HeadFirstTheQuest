@@ -12,7 +12,7 @@ namespace TheQuest
         public Weapon WeaponInRoom;
         public Dictionary<string, Bitmap> ImageTable = new Dictionary<string, Bitmap>();
 
-        private Player player;
+        public Player player;
         public Point PlayerLocation { get { return player.Location; } }
         public int PlayerHitPoints { get { return player.HitPoints; } }
         public List<string> PlayerWeapons { get { return player.Weapons; } }
@@ -26,7 +26,7 @@ namespace TheQuest
         public GameManager (Rectangle boundaries)
         {
             this.boundaries = boundaries;
-            player = new Player(this, new Point(11, 2));
+            player = new Player(this, new Point(11, 2), "player");
             InitImages();
         }
 
@@ -77,7 +77,7 @@ namespace TheQuest
                 case 1:
                     Enemies = new List<Enemy>();
                     Enemies.Add(new Enemies.Bat(this, GetRandomLocation(random)));
-                    WeaponInRoom = new Weapons.Sword(this, GetRandomLocation(random));
+                    WeaponInRoom = new Weapons.Sword(this, GetRandomLocation(random), "sword");
                     break;
             }
         }
@@ -102,19 +102,52 @@ namespace TheQuest
             }
         }
 
-        public void test(PictureBox pictureBox)
+        public void DrawImage(Graphics g, string name, Point p, bool alignment = false) // alignment가 false면 좌상단, true면 중심을 기준으로 그립니다.
         {
-            pictureBox.Image = ImageTable["battleaxe"];
-        }
-
-        public void DrawImage(Graphics g, string name, Point p)
-        {
+            if (alignment)
+            {
+                Bitmap bitmap = ImageTable[name];
+                p.X -= bitmap.Width / 2;
+                p.Y -= bitmap.Height / 2;
+            }
             g.DrawImage(ImageTable[name], p);
         }
 
         public Bitmap LoadImage(string name)
         {
             return ImageTable[name];
+        }
+
+        public void DrawEnemies(Graphics g)
+        {
+            if (Enemies == null)
+                return;
+
+            foreach(Enemy enemy in Enemies)
+            {
+                enemy.Draw(g);
+            }
+        }
+
+        public void DrawPlayer(Graphics g)
+        {
+            if (player == null)
+                return;
+            player.Draw(g);
+        }
+
+        public void DrawItems(Graphics g)
+        {
+            if (WeaponInRoom == null)
+                return;
+            WeaponInRoom.Draw(g);
+        }
+
+        public void DrawObjects(Graphics g)
+        {
+            DrawItems(g);
+            DrawEnemies(g);
+            DrawPlayer(g);
         }
     }
 }

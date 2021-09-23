@@ -15,7 +15,7 @@ namespace TheQuest
             get { return hitPoints <= 0; }
         }
 
-        public Enemy(GameManager manager, Point location, int hitPoints) : base(manager, location)
+        public Enemy(GameManager manager, Point location, string imageName, int hitPoints) : base(manager, location, imageName)
         {
             this.hitPoints = hitPoints;
         }

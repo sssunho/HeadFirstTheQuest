@@ -8,17 +8,18 @@ namespace TheQuest
 {
     abstract class Mover
     {
-        private PictureBox pictureBox;
+        string imageName;
 
         private const int MoveInterval = FormSizeInfo.TilePixelSize;
         protected Point location;
         public Point Location { get { return location; } }
         protected GameManager manager;
 
-        public Mover(GameManager manager, Point location)
+        public Mover(GameManager manager, Point location, string imageName)
         {
             this.manager = manager;
             this.location = location;
+            this.imageName = imageName;
         }
 
         public bool Nearby(Point locationToCheck, int distance)
@@ -79,6 +80,12 @@ namespace TheQuest
             }
 
             return newLocation;
+        }
+
+        public void Draw(Graphics g)
+        {
+            Point drawPoint = FormSizeInfo.TileToMidPixel(location);
+            manager.DrawImage(g, imageName, drawPoint, true);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace TheQuest
         private bool pickedUp;
         public bool PickedUp { get { return pickedUp; } }
 
-        public Weapon(GameManager manager, Point location) : base(manager, location)
+        public Weapon(GameManager manager, Point location, string imageName) : base(manager, location, imageName)
         {
             pickedUp = false;
         }

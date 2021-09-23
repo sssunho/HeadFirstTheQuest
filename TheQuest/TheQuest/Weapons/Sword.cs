@@ -7,7 +7,7 @@ namespace TheQuest.Weapons
 {
     class Sword : Weapon
     {
-        public Sword(GameManager manager, Point location) : base(manager, location)
+        public Sword(GameManager manager, Point location, string imageName) : base(manager, location, imageName)
         { }
 
         public override string Name { get { return "Sword"; } }

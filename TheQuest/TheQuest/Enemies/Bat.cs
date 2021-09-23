@@ -7,7 +7,7 @@ namespace TheQuest.Enemies
 {
     class Bat : Enemy
     {
-        public Bat(GameManager manager, Point location) : base(manager, location, 6)
+        public Bat(GameManager manager, Point location) : base(manager, location, "bat", 6)
         {
 
         }
