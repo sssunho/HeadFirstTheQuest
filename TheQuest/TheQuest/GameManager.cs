@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
 
 namespace TheQuest
 {
     class GameManager
     {
-        public List<Enemy> Enemies;
+        public List<Enemy> Enemies = new List<Enemy>();
         public Weapon WeaponInRoom;
         public Dictionary<string, Bitmap> ImageTable = new Dictionary<string, Bitmap>();
 
@@ -23,6 +24,11 @@ namespace TheQuest
         private Rectangle boundaries;
         public Rectangle Boundaries { get { return boundaries; } }
 
+        private Direction input = Direction.NONE;
+        public Direction Input { get => input; set { input = value; } }
+
+        private Point objective = new Point(0, 2);
+
         public GameManager (Rectangle boundaries)
         {
             this.boundaries = boundaries;
@@ -30,11 +36,50 @@ namespace TheQuest
             InitImages();
         }
 
+        public void Update()
+        {
+            int i = 0;
+
+            if (player.HitPoints <= 0)
+                Application.Exit();
+
+            if (player.Location == objective)
+                NewLevel(TheQuest.random);
+
+            while(i < Enemies.Count)
+            {
+                if (Enemies[i].HitPoints < 0)
+                    Enemies.RemoveAt(i);
+                else
+                    i++;
+            }
+
+            i = 0;
+            while (i < player.Inventory.Count)
+            {
+                if (player.Inventory[i] is IPotion)
+                {
+                    IPotion potion = player.Inventory[i] as IPotion;
+                    if (potion.Used)
+                        player.Inventory.RemoveAt(i);
+                    else
+                        i++;
+                }
+                else
+                    i++;
+            }
+        }
+
         public void Move(Direction direction, Random random)
         {
-            player.Move(direction);
+            if (!player.Move(direction))
+                return;
+
             foreach (Enemy enemy in Enemies)
                 enemy.Move(random);
+
+            if(WeaponInRoom != null)
+                WeaponInRoom.Update();
         }
 
         public void Equip(string weaponName)
@@ -66,18 +111,54 @@ namespace TheQuest
 
         private Point GetRandomLocation (Random random)
         {
-            return new Point(random.Next(FormSizeInfo.GroundNumsTileX, FormSizeInfo.GroundNumsTileY));
+            return new Point(random.Next(FormSizeInfo.GroundNumsTileX), 
+                             random.Next(FormSizeInfo.GroundNumsTileY) );
         }
 
         public void NewLevel(Random random)
         {
             level++;
-            switch(level)
+            Enemies = new List<Enemy>();
+            player.MoveToStartPoint();
+
+            switch (level)
             {
                 case 1:
-                    Enemies = new List<Enemy>();
                     Enemies.Add(new Enemies.Bat(this, GetRandomLocation(random)));
-                    WeaponInRoom = new Weapons.Sword(this, GetRandomLocation(random), "sword");
+                    WeaponInRoom = new Weapons.Sword(this, GetRandomLocation(random));
+                    break;
+                case 2:
+                    Enemies.Add(new Enemies.Ghost(this, GetRandomLocation(random)));
+                    WeaponInRoom = new Weapons.RedPotion(this, GetRandomLocation(random));
+                    break;
+                case 3:
+                    Enemies.Add(new Enemies.Ghoul(this, GetRandomLocation(random)));
+                    WeaponInRoom = new Weapons.Bow(this, GetRandomLocation(random));
+                    break;
+                case 4:
+                    Enemies.Add(new Enemies.Bat(this, GetRandomLocation(random)));
+                    Enemies.Add(new Enemies.Ghost(this, GetRandomLocation(random)));
+                    WeaponInRoom = new Weapons.RedPotion(this, GetRandomLocation(random));
+                    break;
+                case 5:
+                    Enemies.Add(new Enemies.Bat(this, GetRandomLocation(random)));
+                    Enemies.Add(new Enemies.Ghoul(this, GetRandomLocation(random)));
+                    WeaponInRoom = new Weapons.RedPotion(this, GetRandomLocation(random));
+                    break;
+                case 6:
+                    Enemies.Add(new Enemies.Ghost(this, GetRandomLocation(random)));
+                    Enemies.Add(new Enemies.Ghoul(this, GetRandomLocation(random)));
+                    WeaponInRoom = new Weapons.Mace(this, GetRandomLocation(random));
+                    break;
+                case 7:
+                    Enemies.Add(new Enemies.Bat(this, GetRandomLocation(random)));
+                    Enemies.Add(new Enemies.Ghost(this, GetRandomLocation(random)));
+                    Enemies.Add(new Enemies.Ghoul(this, GetRandomLocation(random)));
+                    WeaponInRoom = new Weapons.BluePotion(this, GetRandomLocation(random));
+                    break;
+
+                default:
+                    Application.Exit();
                     break;
             }
         }
@@ -149,5 +230,12 @@ namespace TheQuest
             DrawEnemies(g);
             DrawPlayer(g);
         }
+
+        public void FillTile(Graphics g, Point p, Color color)
+        {
+            p = FormSizeInfo.TileToLeftUpPixel(p);
+            g.FillRectangle(new SolidBrush(color), new Rectangle(p, new Size(FormSizeInfo.TilePixelSize, FormSizeInfo.TilePixelSize)));
+        }
+
     }
 }

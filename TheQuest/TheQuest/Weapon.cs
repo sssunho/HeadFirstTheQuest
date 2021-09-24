@@ -15,6 +15,20 @@ namespace TheQuest
             pickedUp = false;
         }
 
+        public void Update()
+        {
+            if (pickedUp)
+                return;
+
+            if (manager.player.Location == location)
+            {
+                pickedUp = true;
+                manager.player.PickUpWeapon(this);
+                manager.WeaponInRoom = null;
+            }
+
+        }
+
         public void PickUpWeapon() { pickedUp = true; }
         public abstract string Name { get; }
         public abstract void Attack(Direction direction, Random random);
@@ -34,6 +48,13 @@ namespace TheQuest
                 target = Move(direction, target, manager.Boundaries);
             }
             return false;
+        }
+
+        public abstract void ShowRange(Graphics g, Direction d);
+
+        public void Draw(Graphics g, int n)
+        {
+            g.DrawImage(manager.ImageTable[ImageName], FormSizeInfo.GetInvenCell(n));
         }
     }
 }

@@ -13,11 +13,14 @@ namespace TheQuest
     {
         GameManager manager;
         Timer gameLoopTimer = new Timer();
-        Point testPoint = new Point(0, 0);
         Bitmap bitmap = new Bitmap(600, 400);
         Graphics bitmapGraphics;
         Direction input = Direction.NONE;
+        public Direction Input { get => input; }
+        Keys invenSelection = Keys.None;
         UpdateGame update;
+        public static Random random = new Random();
+        private bool keyDown = false;
 
         public TheQuest()
         {
@@ -36,14 +39,13 @@ namespace TheQuest
             this.KeyDown += GetKey;
 
             manager = new GameManager(FormSizeInfo.GroundRect);
-        }
-
-        public void RegisterPictureBox(PictureBox pictureBox)
-        {
+            manager.NewLevel(random);
         }
 
         private void GameLoop(object sender, EventArgs e)
         {
+            manager.Input = input;
+            manager.Update();
             update();
             Invalidate();
         }
@@ -59,18 +61,43 @@ namespace TheQuest
             {
                 case Keys.Up:
                     input = Direction.Up;
+                    manager.Input = input;
+                    keyDown = true;
                     break;
 
                 case Keys.Down:
                     input = Direction.Down;
+                    manager.Input = input;
+                    keyDown = true;
                     break;
 
                 case Keys.Left:
                     input = Direction.Left;
+                    manager.Input = input;
+                    keyDown = true;
                     break;
 
                 case Keys.Right:
                     input = Direction.Right;
+                    manager.Input = input;
+                    keyDown = true;
+                    break;
+
+                case Keys.D1:
+                case Keys.D2:
+                case Keys.D3:
+                case Keys.D4:
+                case Keys.D5:
+                case Keys.D6:
+                case Keys.D7:
+                case Keys.D8:
+                    update = UseItem;
+                    invenSelection = e.KeyCode;
+                    break;
+
+                case Keys.Space:
+                case Keys.Escape:
+                    invenSelection = e.KeyCode;
                     break;
 
                 default:
@@ -81,12 +108,70 @@ namespace TheQuest
 
         private void PlayerTurn()
         {
-            if(input != Direction.NONE)
+            if (keyDown)
             {
-                manager.player.Move(input);
-                input = Direction.NONE;
+                manager.Move(input, random);
+                keyDown = false;
             }
         }
+
+        private void UseItem()
+        {
+            int i = 0;
+            switch(invenSelection)
+            {
+                case Keys.D1:
+                    i = 0;
+                    break;
+                case Keys.D2:
+                    i = 1;
+                    break;
+                case Keys.D3:
+                    i = 2;
+                    break;
+                case Keys.D4:
+                    i = 3;
+                    break;
+                case Keys.D5:
+                    i = 4;
+                    break;
+                case Keys.D6:
+                    i = 5;
+                    break;
+                case Keys.D7:
+                    i = 6;
+                    break;
+                case Keys.D8:
+                    i = 7;
+                    break;
+                case Keys.Escape:
+                    EndItemUse();
+                    return;
+                case Keys.Space:
+                    manager.Attack(input, random);
+                    EndItemUse();
+                    return;
+            }
+
+            if (i >= manager.player.Weapons.Count)
+            {
+                EndItemUse();
+                return;
+            }
+
+            manager.Equip(manager.player.Weapons[i]);
+
+
+        }
+
+        private void EndItemUse()
+        {
+            update = PlayerTurn;
+            manager.player.Disarm();
+            keyDown = false;
+        }
+
+        //private void 
 
         private void EnemyTurn()
         {

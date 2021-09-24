@@ -8,7 +8,8 @@ namespace TheQuest
 {
     abstract class Mover
     {
-        string imageName;
+        private string imageName;
+        public string ImageName { get => imageName; }
 
         private const int MoveInterval = FormSizeInfo.TilePixelSize;
         protected Point location;
@@ -24,13 +25,13 @@ namespace TheQuest
 
         public bool Nearby(Point locationToCheck, int distance)
         {
-            return MathF.Abs(location.X - locationToCheck.X) < distance &&
-                   MathF.Abs(location.Y - locationToCheck.Y) < distance;
+            return MathF.Abs(location.X - locationToCheck.X) +
+                   MathF.Abs(location.Y - locationToCheck.Y) <= distance;
         }
         public bool Nearby(Point center, Point target, int radius)
         {
-            return MathF.Abs(target.X - center.X) < radius &&
-                   MathF.Abs(target.Y - center.Y) < radius;
+            return MathF.Abs(target.X - center.X) <= radius &&
+                   MathF.Abs(target.Y - center.Y) <= radius;
         }
 
         public Point Move(Direction direction, Rectangle boundaries)
@@ -82,7 +83,7 @@ namespace TheQuest
             return newLocation;
         }
 
-        public void Draw(Graphics g)
+        public virtual void Draw(Graphics g)
         {
             Point drawPoint = FormSizeInfo.TileToMidPixel(location);
             manager.DrawImage(g, imageName, drawPoint, true);

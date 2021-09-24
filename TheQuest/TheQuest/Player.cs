@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 
 namespace TheQuest
@@ -8,8 +7,10 @@ namespace TheQuest
     class Player : Mover
     {
         private Weapon equippedWeapon;
+        private int maxHitPoints;
         private int hitPoints;
         public int HitPoints { get { return hitPoints; } }
+
 
         private List<Weapon> inventory = new List<Weapon>();
         public List<string> Weapons
@@ -23,9 +24,17 @@ namespace TheQuest
             }
         }
 
+        public List<Weapon> Inventory { get => inventory; }
+
         public Player(GameManager manager, Point location, string imageName) : base(manager, location, imageName)
         {
             hitPoints = 10;
+            maxHitPoints = 10;
+        }
+
+        public void MoveToStartPoint()
+        {
+            location = new Point(11, 2);
         }
 
         public void Hit(int maxDamage, Random random)
@@ -47,14 +56,23 @@ namespace TheQuest
             }
         }
 
-        public void Move(Direction direction)
+        public void Disarm()
         {
-            base.location = Move(direction, manager.Boundaries);
-            Console.WriteLine(location);
-            //if(!manager.WeaponInRoom.PickedUp)
-            //{
+            equippedWeapon = null;
+        }
 
-            //}
+        public bool Move(Direction direction)
+        {
+            Point newLocation = base.Move(direction, manager.Boundaries);
+            if (newLocation == location)
+                return false;
+            location = newLocation;
+            return true;
+        }
+
+        public void PickUpWeapon(Weapon weapon)
+        {
+            inventory.Add(weapon);
         }
 
         public void Attack(Direction direction, Random random)
@@ -64,6 +82,24 @@ namespace TheQuest
             equippedWeapon.Attack(direction, random);
         }
 
+        public override void Draw(Graphics g)
+        {
+            base.Draw(g);
+
+            Bitmap hpbar = manager.ImageTable["hp"];
+            Point hpBarOrigin = FormSizeInfo.TileToLeftUpPixel(location).Add(new Point(0, -10));
+            float hpRatio = hitPoints >= 0 ? hitPoints / (float)maxHitPoints : 0;
+            Rectangle hpRect = new Rectangle(hpBarOrigin, new Size((int)(hpbar.Width * hpRatio), hpbar.Height));
+            g.DrawImage(hpbar, hpRect);
+
+            for (int i = 0; i < inventory.Count; i++)
+            {
+                inventory[i].Draw(g, i);
+            }
+
+            if (equippedWeapon != null)
+                equippedWeapon.ShowRange(g, manager.Input);
+        }
 
     }
 }
